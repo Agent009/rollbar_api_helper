@@ -46,9 +46,10 @@ def get_items():
 def get_item_id_by_counter(rollbar_item_counter):
     url = 'item_by_counter/' + str(rollbar_item_counter)
     response_data = http_utils.send_http_request('GET', url)
+    # print(response_data)
 
     try:
-        item_id = response_data['result']['itemId']
+        item_id = response_data['result']['id']
         print('get_item_id_by_counter -> Item ID: ' + str(item_id))
         return item_id
     except KeyError as e:
@@ -100,7 +101,7 @@ def delete_occurrences(item_id):
             print('delete_occurrences -> Item ID: ' + str(item_id) + ' -> deleted occurrence ID: ' + str(
                 occurrence_id) + f', response: {response2}')
 
-        # Break if we have fewer occurrences than the limit per page (20 in this case)
+        # Break if we have fewer occurrences than the limit per page
         if len(occurrences) < constants.default_limit_per_page:
             break
 
