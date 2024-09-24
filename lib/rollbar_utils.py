@@ -6,13 +6,24 @@ import lib.http_utils as http_utils
 # Get the list of items.
 # https://docs.rollbar.com/reference/list-all-items
 # _______________________________________________________________
-def get_items():
+def get_items(levels=None, environments=None, query=None, status=None):  # Added parameters
     url = 'items'
     all_records = []
     page = 1
 
     while True:
         params = {'page': page}
+        
+        # Add filtering parameters if provided
+        if levels:
+            params['level'] = ','.join(levels)  # Join levels as a comma-separated string
+        if environments:
+            params['environment'] = ','.join(environments)  # Join environments as a comma-separated string
+        if query:
+            params['query'] = query  # Add query parameter
+        if status:
+            params['status'] = status  # Add status parameter
+
         response_data = http_utils.send_http_request('GET', url, params=params)
 
         try:
@@ -20,7 +31,6 @@ def get_items():
             records = response_data['result']['items']
             print('get_items -> Page: ' + str(page) + ', Total: ' + str(total_count))
             all_records.extend(records)
-            # return {'page': page, 'total_count': total_count, 'items': records}
 
             # Break if we have fewer items than the limit per page
             if total_count < constants.default_limit_per_page:
