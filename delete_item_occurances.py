@@ -11,7 +11,7 @@ if __name__ == "__main__":
     for counter in counters:
         ids.append(rollbar_utils.get_item_id_by_counter(counter))
 
-    items = rollbar_utils.get_items(environments=["development"])
+    items = rollbar_utils.get_items() #environments=["development"]
 
     if items["total_count"] > 0:
         # Filter items based on the provided counters/ids.
